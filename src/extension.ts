@@ -6,7 +6,6 @@ let statusBarItem: vscode.StatusBarItem;
 
 // This method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
-
     // Watch .gitconfig for changes
     watchGitConfig();
 
@@ -18,6 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
+
+    // Activate the extension automatically when Visual Studio Code starts up
+    vscode.workspace.onDidOpenTextDocument(() => {
+        // Trigger the command to create the status bar item
+        vscode.commands.executeCommand('latest-component-changed-vsc.CustomExtension');
+    });
 }
 
 export function deactivate() {}
@@ -40,7 +45,7 @@ function getLatestComponentChanged(): string {
     try {
         // Execute git command to get the value of latest-component-changed
         const latestComponentChanged = execSync('git config --get variable.latest-component-changed').toString().trim();
-        // is latestComponentChanged is empty, return 'Unknown'
+        // is latestComponentChanged is empty, return 'No component changed'
         if (!latestComponentChanged){
             return 'No component changed';
         }else{
@@ -57,7 +62,7 @@ function getLatestComponentChanged(): string {
 
 // Update the status bar item with the latest value of latest-component-changed (terminal-bash icon)
 function updateStatusBar() {    
-	statusBarItem.text = `$(code) ${getLatestComponentChanged()}`; // icons list: https://microsoft.github.io/vscode-codicons/dist/codicon.html
-	statusBarItem.tooltip = 'Latest component changed';
+    statusBarItem.text = `$(code) ${getLatestComponentChanged()}`; // icons list: https://microsoft.github.io/vscode-codicons/dist/codicon.html
+    statusBarItem.tooltip = 'Latest component changed';
     statusBarItem.show();
 }

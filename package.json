@@ -9,16 +9,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
   "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "latest-component-changed-vsc.CustomExtension",
-        "title": "Run Latest Component Changed Extension"
-      }
-    ]
-  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
