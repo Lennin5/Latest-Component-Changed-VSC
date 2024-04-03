@@ -15,7 +15,7 @@
     "commands": [
       {
         "command": "latest-component-changed-vsc.CustomExtension",
-        "title": "Run My Extension"
+        "title": "Run Latest Component Changed Extension"
       }
     ]
   },
