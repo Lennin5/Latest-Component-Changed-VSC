@@ -11,8 +11,8 @@ The Latest Component Changed VSC extension for Visual Studio Code displays the l
 ## Usage
 
 1. Install the extension from the Visual Studio Code Marketplace.
-2. Run the "Run My Extension" command from the command palette (Ctrl+Shift+P or Cmd+Shift+P on macOS).
-3. The latest changed component will be displayed in the Visual Studio Code status bar.
+2. The latest changed component will be displayed in the Visual Studio Code status bar automatically.
+3. Compatibility and personal use with conventional commit environment
 
 ## Configuration
 
