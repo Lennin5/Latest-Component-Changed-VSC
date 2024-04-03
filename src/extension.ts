@@ -4,23 +4,17 @@ import { watchFile } from 'fs';
 let statusBarItem: vscode.StatusBarItem;
 
 export function activate(context: vscode.ExtensionContext) {
-    // // Create a status bar item
-    // statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    // statusBarItem.text = "Hola Mundo";
-    // statusBarItem.show();
 
     // Watch .gitconfig for changes
     watchGitConfig();
 
-    let disposable = vscode.commands.registerCommand('latest-component-changed-vsc.CustomExtension', () => {
-        // Show a message when the command is executed
-        vscode.window.showInformationMessage('Hello World from test! Latest component changed: ' + getLatestComponentChanged());
-			// Create a status bar item
-			statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-			// statusBarItem.text = '[latest component changed]: ' + getLatestComponentChanged();
-			statusBarItem.text = `$(code) ${getLatestComponentChanged()}`;
-			statusBarItem.tooltip = 'Latest component changed';
-			statusBarItem.show();		
+    let disposable = vscode.commands.registerCommand('latest-component-changed-vsc.CustomExtension', () => {		
+        // Create a status bar item
+        statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        // statusBarItem.text = '[latest component changed]: ' + getLatestComponentChanged();
+        statusBarItem.text = `$(code) ${getLatestComponentChanged()}`;
+        statusBarItem.tooltip = 'Latest component changed';
+        statusBarItem.show();		
     });
 
     context.subscriptions.push(disposable);
