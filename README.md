@@ -7,6 +7,7 @@ The Latest Component Changed VSC extension for Visual Studio Code displays the l
 - Displays the latest changed component in the Visual Studio Code status bar.
 - Automatically updates when changes occur in the .gitconfig file.
 
+
 ## Usage
 
 1. Install the extension from the Visual Studio Code Marketplace.
@@ -16,6 +17,11 @@ The Latest Component Changed VSC extension for Visual Studio Code displays the l
 ## Configuration
 
 No additional configuration is required. The extension automatically retrieves information from the .gitconfig file.
+
+## Build
+
+To create .vsix extension file, you need to execute command: vsce package
+If you don't have vsce library, install it with command: npm install -g vsce
 
 ## Icons
 
