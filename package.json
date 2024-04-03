@@ -4,6 +4,10 @@
   "description": "This extension prints the lastest component changed in the status bar of the code editor.",
   "publisher": "Lennin Lemus",
   "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lennin5/Latest-Component-Changed-VSC"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.87.0"
