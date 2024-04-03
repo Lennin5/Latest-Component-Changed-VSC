@@ -2,30 +2,26 @@ import * as vscode from 'vscode';
 import { watchFile } from 'fs';
 
 // Declare a status bar item
-let statusBarItem: vscode.StatusBarItem;
+let statusBarItem: vscode.StatusBarItem | undefined;
 
 // This method is called when the extension is activated
 export function activate(context: vscode.ExtensionContext) {
     // Watch .gitconfig for changes
     watchGitConfig();
 
-    // Register the command to create a status bar item
-    let disposable = vscode.commands.registerCommand('latest-component-changed-vsc.CustomExtension', () => {		
-        // Create a status bar item
-        statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        updateStatusBar();
-    });
-
-    context.subscriptions.push(disposable);
-
     // Activate the extension automatically when Visual Studio Code starts up
     vscode.workspace.onDidOpenTextDocument(() => {
-        // Trigger the command to create the status bar item
-        vscode.commands.executeCommand('latest-component-changed-vsc.CustomExtension');
+        // Trigger the command to create or update the status bar item
+        updateStatusBar();
     });
 }
 
-export function deactivate() {}
+export function deactivate() {
+    // Dispose of the status bar item when the extension is deactivated
+    if (statusBarItem) {
+        statusBarItem.dispose();
+    }
+}
 
 // Watch for changes in .gitconfig file
 function watchGitConfig() {
@@ -45,10 +41,10 @@ function getLatestComponentChanged(): string {
     try {
         // Execute git command to get the value of latest-component-changed
         const latestComponentChanged = execSync('git config --get variable.latest-component-changed').toString().trim();
-        // is latestComponentChanged is empty, return 'No component changed'
-        if (!latestComponentChanged){
+        // If latestComponentChanged is empty, return 'No component changed'
+        if (!latestComponentChanged) {
             return 'No component changed';
-        }else{
+        } else {
             return latestComponentChanged;
         }
     } catch (error) {
@@ -60,8 +56,13 @@ function getLatestComponentChanged(): string {
     }
 }
 
-// Update the status bar item with the latest value of latest-component-changed (terminal-bash icon)
-function updateStatusBar() {    
+// Create or update the status bar item with the latest value of latest-component-changed (terminal-bash icon)
+function updateStatusBar() {
+    if (!statusBarItem) {
+        // If the status bar item doesn't exist, create it
+        statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+    }
+
     statusBarItem.text = `$(code) ${getLatestComponentChanged()}`; // icons list: https://microsoft.github.io/vscode-codicons/dist/codicon.html
     statusBarItem.tooltip = 'Latest component changed';
     statusBarItem.show();

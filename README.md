@@ -21,7 +21,7 @@ No additional configuration is required. The extension automatically retrieves i
 ## Build
 
 To create .vsix extension file, you need to execute command: vsce package
-If you don't have vsce library, install it with command: npm install -g vsce
+- If you don't have vsce library, install it with command: npm install -g vsce
 
 ## Icons
 
