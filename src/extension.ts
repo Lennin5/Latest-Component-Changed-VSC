@@ -63,7 +63,7 @@ function updateStatusBar() {
         statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     }
 
-    statusBarItem.text = `$(code) ${getLatestComponentChanged()}`; // icons list: https://microsoft.github.io/vscode-codicons/dist/codicon.html
+    statusBarItem.text = `$(code) ${getLatestComponentChanged()}`;
     statusBarItem.tooltip = 'Latest component changed';
     statusBarItem.show();
 }

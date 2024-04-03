@@ -26,6 +26,7 @@ To create .vsix extension file, you need to execute command: vsce package
 ## Icons
 
 The extension utilizes icons from VS Code Codicons for the status bar.
+- The list of icons: https://microsoft.github.io/vscode-codicons/dist/codicon.html
 
 ## Notes
 
