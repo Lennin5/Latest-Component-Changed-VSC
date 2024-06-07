@@ -7,9 +7,6 @@ The Latest Component Changed VSC extension for Visual Studio Code displays the l
 - Displays the latest changed component in the Visual Studio Code status bar.
 - Automatically updates when changes occur in the .gitconfig file.
 
-
-## Usage
-
 1. Install the extension from the Visual Studio Code Marketplace.
 2. The latest changed component will be displayed in the Visual Studio Code status bar automatically.
 3. Compatibility and personal use with conventional commit environment
@@ -18,10 +15,35 @@ The Latest Component Changed VSC extension for Visual Studio Code displays the l
 
 No additional configuration is required. The extension automatically retrieves information from the .gitconfig file.
 
+## Before Build
+You need node_modules before create the .vsix file, if you clone this repo, don't remember the command: $ npm install
+
 ## Build
 
-To create .vsix extension file, you need to execute command: vsce package
-- If you don't have vsce library, install it with command: npm install -g vsce
+To create .vsix extension file, you need to execute command: $ vsce package
+- If you don't have vsce library, install it with command: $ npm install -g vsce
+
+## Possible Compilation Errors
+When we type vsce package to create .vsix file and we already have the vsce package, and shows a message like:
+
+"vsce : No se puede cargar el archivo C:\Program Files\nodejs\vsce.ps1 porque la ejecución de scripts está deshabilitada en este sistema.
+
+Para obtener más información,
+consulta el tema about_Execution_Policies en https:/go.microsoft.com/fwlink/?LinkID=135170.
+En línea: 1 Carácter: 1
+vsce package
+    CategoryInfo          : SecurityError: ,
+    PSSecurityException
+    FullyQualifiedErrorId : UnauthorizedAccess"
+
+We need security access on our system, in Windows Systems the solution is:
+
+- Open the Windows Powershell as EXECUTE AS ADMINISTRATOR
+- Type commad: $ Get-ExecutionPolicy
+- Then command: $ Set-ExecutionPolicy RemoteSigned
+- Type "Yes" and Enter
+
+Now we can generate the .vsix file to install the extension in Visual Studio Code
 
 ## Icons
 
