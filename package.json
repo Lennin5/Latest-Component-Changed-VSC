@@ -19,6 +19,15 @@
   "activationEvents": [
     "onStartupFinished"
   ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "latest-component-changed.showSelector",
+        "title": "Show Component Selector",
+        "category": "Latest Component Changed"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
