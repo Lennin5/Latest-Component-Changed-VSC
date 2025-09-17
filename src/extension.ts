@@ -85,7 +85,7 @@ function getComponentsArray(): string[] {
     const { execSync } = require('child_process');
     try {
         // Execute git command to get the array of components
-        const componentsArray = execSync('git config --get variable.latest-components-array').toString().trim();
+        const componentsArray = execSync('git config --get variable.latest-components-recent-list').toString().trim();
         if (!componentsArray) {
             return [];
         }
@@ -132,7 +132,7 @@ function showComponentSelectorQuickPick(): void {
     // Show the quick pick
     vscode.window.showQuickPick(quickPickItems, {
         placeHolder: 'Select a component to set as current',
-        title: 'Recent Components'
+        title: 'Recent Components Changed'
     }).then(selected => {
         if (selected) {
             setCurrentComponent(selected.label);
@@ -156,16 +156,18 @@ function updateStatusBar() {
         console.log(`Components array: ${componentsArray.join(', ')}`);
         
         // statusBarItem.text = `$(code) ${currentComponent}`;
-        statusBarItem.text = `$(git-branch) ${currentComponent}`;
+        // statusBarItem.text = `$(symbol-constructor) ${currentComponent}`;
+        statusBarItem.text = `$(code) ${currentComponent}`;
         
         // Make the status bar item clickable
         statusBarItem.command = 'latest-component-changed.showSelector';
         
         // Update tooltip to show it's clickable and show recent components
         if (componentsArray.length > 1) {
-            statusBarItem.tooltip = `Latest component changed: ${currentComponent}\n\nClick to select from recent components:\n${componentsArray.join(', ')}`;
+            // statusBarItem.tooltip = `Latest component changed: ${currentComponent}\nClick to select another recent component changed:\n${componentsArray.join(', ')}`;
+            statusBarItem.tooltip = `Latest component changed: ${currentComponent}\nClick to select another recent component changed`;
         } else {
-            statusBarItem.tooltip = `Latest component changed: ${currentComponent}\n\nClick to select component`;
+            statusBarItem.tooltip = `Latest component changed: ${currentComponent}\nClick to select component`;
         }
         
         statusBarItem.show();

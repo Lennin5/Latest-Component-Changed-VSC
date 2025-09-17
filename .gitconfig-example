@@ -1,0 +1,76 @@
+[variable]
+	latest-component-changed = perfil
+	latest-components-recent-list = button,perfil,new-co,lorem ipsum component,footer component
+[alias]
+	lc = "!f() { echo '[global variable] latest-component-changed:' $(git config --get variable.latest-component-changed); }; f" # Mostrar el componente actual que se está modificando en desarrollo para los conventional commits
+	lcl = "!f() { echo '[global variable] latest-components-recent-list:' $(git config --get variable.latest-components-recent-list); }; f" # Mostrar la lista de componentes modificados en desarrollo para los conventional commits
+	ac = !git add . && git commit -m # Agregar todos los cambios y hacer un commit con un mensaje | git commit -m "mensaje"
+	ss = status # Mostrar el estado de los archivos | git status
+	b = branch # Mostrar todas las ramas | git branch
+	bD = "!f() { git branch -D \"$*\"; }; f" # Eliminar una rama local | git branch -D  + nombre-rama
+	l = log # Mostrar el historial de commits | git log
+	lo = log --oneline # Mostrar el historial de commits en una sola línea | git log --oneline
+	lg = log --oneline --graph --all # Mostrar el historial de commits en una sola línea con gráficos | git log --oneline --graph --all
+	ch = "!f() { git checkout \"$*\"; }; f" # Cambiar de rama | git checkout nombre-rama
+	m = "!f() { git merge \"$*\"; }; f" # Hacer merge a una rama | git merge nombre-rama
+	p = "!f() { git push origin \"$*\"; }; f" # Hacer push a una rama | git push origin nombre-rama
+	pp = "!f() { git pull origin \"$*\"; }; f" # Hacer pull a una rama | git pull origin nombre-rama
+	s = stash # Guardar cambios temporalmente | git stash
+	sm = "!f() { git stash push -m \"$*\"; }; f" # Hacer stash con mensaje | stash push -m "mensaje"
+	sl = stash list # Listar stashes | stash list
+	sp = stash pop # Aplicar último stash y eliminarlo | stash pop
+	sa = "!f() { git stash apply stash@{\"$*\"}; }; f" # Aplicar stash sin eliminarlo | stash apply stash@{index} (+ index de stash al ejecutar comando)
+	sd = "!f() { git stash drop stash@{\"$*\"}; }; f" # Eliminar un stash | stash drop stash@{index} (+ index de stash al ejecutar comando)
+	sc = stash clear # Eliminar todos los stashes | stash clear
+
+	# Comando para imprimir los alias que se han personalizado con el comando git h
+	# h = "!f() { grep -E '^\\s*[a-zA-Z0-9_-]+\\s*=.#' ~/.gitconfig | sed -E 's/^\\s([a-zA-Z0-9_-]+)\\s*=.#\\s(.*)$/\\1 ► \\2/' | sed -E '/^(feat|style|refactor|fix|docs|hotfix|test|ci|perf|build|animation|fixm) ►/s/►/●/' | sort; }; f"
+
+	# Version estable con colores e íconos) *deprecado
+	# h = "!f() { grep -E '^\\s*[a-zA-Z0-9_-]+\\s*=.#' ~/.gitconfig | sed -E 's/^\\s([a-zA-Z0-9_-]+)\\s*=.#\\s(.)$/\\1 ► \\2/' | awk 'BEGIN{ORANGE=\"\\033[38;5;215m\"; GREEN=\"\\033[38;5;120m\"; RED=\"\\033[38;5;210m\"; PURPLE=\"\\033[38;5;141m\"; RESET=\"\\033[0m\"} { a=$1; $1=\"\"; sub(/^ /,\"\"); l=$0; if (a==\"h\") { printf \"0\\t\" RED a RESET \" ★ \" RED \"Mostrar todos los comandos alias personalizados\" RESET \"\\n\"; next } if (a==\"ss\") { sub(/►/, \"●\", l); if (l ~ /\\|/) { sub(/\\|./, GREEN substr(l, index(l,\"|\")) RESET, l) } printf \"1\\t\" GREEN a RESET \" \" l \"\\n\"; printf \"2\\t\" PURPLE \"lc\" RESET \" ★ \" PURPLE \"Mostrar el componente actual que se está modificando en desarrollo\" RESET \"\\n\"; next } if (a==\"lc\") { next } if (a ~ /^(feat|style|refactor|fix|docs|hotfix|test|ci|perf|build|animation|fixm|chore)$/) { if (l ~ /\\|/) { sub(/\\|./, ORANGE substr(l, index(l,\"|\")) RESET, l) } printf \"3\\t\" ORANGE a RESET \" \" l \"\\n\" } else { if (l ~ /\\|/) { sub(/\\|./, GREEN substr(l, index(l,\"|\")) RESET, l) } sub(/►/, \"●\", l); printf \"1\\t\" GREEN a RESET \" \" l \"\\n\" } }' | sort -k1,1 -k2,2 | sed -E 's/^[0-9]\\t//'; }; f"
+
+	# Versión estable mejorada solucionando problemas de regex
+	h = "!f() { grep -E '^\\s*[A-Za-z0-9_-]+\\s*=\\s*[^#]*#' ~/.gitconfig | sed -E 's/^\\s*([A-Za-z0-9_-]+)\\s*=\\s*[^#]*#\\s*(.*)$/\\1 ► \\2/' | awk 'BEGIN{ORANGE=\"\\033[38;5;215m\"; GREEN=\"\\033[38;5;120m\"; RED=\"\\033[38;5;210m\"; PURPLE=\"\\033[38;5;141m\"; RESET=\"\\033[0m\"} { a=$1; $1=\"\"; sub(/^ /,\"\"); l=$0; if (a==\"h\") { printf \"0\\t\" RED a RESET \" ★ \" RED \"Mostrar todos los comandos alias personalizados\" RESET \"\\n\"; next } if (a==\"ss\") { sub(/►/, \"●\", l); if (l ~ /\\|/) { sub(/\\|.*/, GREEN substr(l, index(l,\"|\")) RESET, l) } printf \"1\\t\" GREEN a RESET \" \" l \"\\n\"; printf \"2\\t\" PURPLE \"lc\" RESET \" ★ \" PURPLE \"Mostrar el componente actual que se está modificando en desarrollo\" RESET \"\\n\"; next } if (a==\"lc\") { next } if (a ~ /^(feat|style|refactor|fix|docs|hotfix|test|ci|perf|build|animation|fixm|chore)$/) { if (l ~ /\\|/) { sub(/\\|.*/, ORANGE substr(l, index(l,\"|\")) RESET, l) } printf \"3\\t\" ORANGE a RESET \" \" l \"\\n\" } else { if (l ~ /\\|/) { sub(/\\|.*/, GREEN substr(l, index(l,\"|\")) RESET, l) } sub(/►/, \"●\", l); printf \"1\\t\" GREEN a RESET \" \" l \"\\n\" } }' | sort -k1,1 -k2,2 | sed -E 's/^[0-9]\\t//'; }; f"
+
+	# hacer un git checkout a rama dev, luego hacer un git pull a la rama dev
+	pull-dev = "!f() { git checkout dev && git pull origin dev; }; f"
+	# hacer un git checkout a rama dev, luego hacer un git pull a la rama dev, luego hacer un git checkout a la dev-lennin, luego hacer un merge de dev a dev-lennin
+	pm = "!f() { git checkout dev && git pull origin dev && git checkout dev-lennin && git merge dev; }; f"
+
+	# Hacer un nuevo commit de style del ultimo componente registrado (ac = add . + commit -m; STYLE; lc = last component)
+	# Comandos comunes
+	# Otra forma de hacer un conventional commit con el componente actual usando una función externa
+	# (Digo otra forma porque esto lo investigué después de hacer la forma de abajo Forma, ed. separando la lógica en los archivos de git-functions y post-commit)
+	# ~/ hace referencia a C:\Users\lennin
+	feat = "!f() { source ~/git-functions && conventional_commit_message 'feat' \"$*\"; }; f"  # Para agregar una nueva funcionalidad
+	style = "!f() { source ~/git-functions && conventional_commit_message 'style' \"$*\"; }; f" # Para agregar cambios de estilo | diseño, maquetación, formato, espacios, etc...
+	refactor = "!f() { source ~/git-functions && conventional_commit_message 'refactor' \"$*\"; }; f" # Para cambios en mejoras del código que no afectan la funcionalidad
+	fix = "!f() { source ~/git-functions && conventional_commit_message 'fix' \"$*\"; }; f" # Para corregir errores
+	docs = "!f() { source ~/git-functions && conventional_commit_message 'docs' \"$*\"; }; f" # Para agregar comentarios o actualizar documentación
+	hotfix = "!f() { source ~/git-functions && conventional_commit_message 'hotfix' \"$*\"; }; f" # Para correcciones urgentes
+	test = "!f() { source ~/git-functions && conventional_commit_message 'test' \"$*\"; }; f" # Para cuando se están desarrollando pruebas
+	ci = "!f() { source ~/git-functions && conventional_commit_message 'ci' \"$*\"; }; f" # Para cambios de integración continua | configuraciones de archivos, uso de librerías, etc...
+	perf = "!f() { source ~/git-functions && conventional_commit_message 'perf' \"$*\"; }; f" # Para mejorar el rendimiento del código
+	build = "!f() { source ~/git-functions && conventional_commit_message 'build' \"$*\"; }; f" # Para cambios en la construcción del código | instalación de paquetes, empaquetado, construcción de /dist etc...
+	animation = "!f() { source ~/git-functions && conventional_commit_message 'animation' \"$*\"; }; f" # Para cambios relacionados con animaciones | keyframes, transiciones, etc...
+	fixm = "!git add . && git commit -m \"fix: resolver conflictos entre ramas\"" # Agregar conventional commit de tipo fix con mensaje fijo | git commit -m "fix: resolver conflictos entre ramas"
+	chore = "!f() { source ~/git-functions && conventional_commit_message 'chore' \"$*\"; }; f" # Para tareas de mantenimiento que no afectan el código | actualizar dependencias, eliminar código de pruebas, console.logs, etc...
+
+	# Otros comandos no tan comunes pero que están para su uso (ci: continuous integration)
+	# acb = "!f() { source ~/git-functions && conventional_commit_message 'build' \"$*\"; }; f"
+	# acc = "!f() { source ~/git-functions && conventional_commit_message 'ci' \"$*\"; }; f"
+	# acp = "!f() { latest_component_changed=$(git config --get variable.latest-component-changed) && git add . && git commit -m \"perf($latest_component_changed): $\"; }; f" # *Forma
+
+	# Comandos personales
+	# ac-animation-lc = "!f() { source ~/git-functions && conventional_commit_message 'animation' \"$*\"; }; f"
+[user]
+	name = Lennin5
+	email = lenninlemus0@gmail.com
+[core]
+	hooksPath = C:/Program Files/Git/hooks
+[credential "helperselector"]
+	selected = manager-core
+[init]
+	defaultBranch = main
+[credential]
+	helper = manager-core

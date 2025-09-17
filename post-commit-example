@@ -1,0 +1,91 @@
+#!/bin/sh
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+#
+# To enable this hook, rename this file to "pre-commit".
+
+# Show message on commit
+# echo "POST-COMMIT HOOK..."
+
+# Obtener el mensaje del último commit
+current_commit=$(git log -1 --pretty=%B)
+# echo "NUEVO COMMIT: $current_commit"
+
+# Guardar el texto dentro del primer paréntesis después de : en el mensaje del commit)
+parenthesis_text=$(echo "$current_commit" | sed -n 's/.*(\([^()]*\)).*/\1/p')
+# echo "COMPONENTE ENCONTRADO: '$parenthesis_text'"
+
+# Si el texto dentro del paréntesis tiene algo, entonces mostrar un mensaje
+if [ -n "$parenthesis_text" ]; then
+    # echo "COMPONENTE CAMBIADO: $parenthesis_text"
+    
+    # Obtener el arreglo actual de componentes (separado por comas)
+    current_array=$(git config --get variable.latest-components-recent-list 2>/dev/null || echo "")
+    
+    # Procesamiento de arreglo preservando componentes con espacios
+    if [ -n "$current_array" ]; then
+        # Creamos un arreglo temporal usando IFS para separar solo por comas
+        IFS=',' read -r -a components_array <<< "$current_array"
+        new_components=""
+        count=0
+        component_exists=false
+        
+        # Verificar si el componente ya existe en la lista
+        for component in "${components_array[@]}"; do
+            # Eliminar espacios al inicio y final para comparación precisa
+            trimmed_component=$(echo "$component" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            trimmed_parenthesis=$(echo "$parenthesis_text" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            
+            if [ "$trimmed_component" = "$trimmed_parenthesis" ]; then
+                component_exists=true
+                break
+            fi
+        done
+        
+        # Si el componente no existe, agregarlo al inicio de la lista
+        if [ "$component_exists" = false ]; then
+            new_components="$parenthesis_text"
+            
+            # Agregar los componentes existentes (máximo 4 más para mantener el límite de 5)
+            for component in "${components_array[@]}"; do
+                trimmed_component=$(echo "$component" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+                trimmed_parenthesis=$(echo "$parenthesis_text" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+                
+                if [ $count -lt 4 ]; then
+                    new_components="$new_components,$component"
+                    count=$((count + 1))
+                fi
+            done
+        else
+            # Si el componente ya existe, moverlo al inicio
+            new_components="$parenthesis_text"
+            for component in "${components_array[@]}"; do
+                trimmed_component=$(echo "$component" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+                trimmed_parenthesis=$(echo "$parenthesis_text" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+                
+                if [ "$trimmed_component" != "$trimmed_parenthesis" ] && [ $count -lt 4 ]; then
+                    new_components="$new_components,$component"
+                    count=$((count + 1))
+                fi
+            done
+        fi
+        
+        # Actualizar el arreglo en la configuración
+        git config --global variable.latest-components-recent-list "$new_components"
+    else
+        # Si no hay arreglo previo, crear uno nuevo con el componente actual
+        git config --global variable.latest-components-recent-list "$parenthesis_text"
+    fi
+    
+    # Mantener la funcionalidad original: guardar el componente actual (asegurándonos de eliminar espacios extras al inicio y final)
+    trimmed_parenthesis=$(echo "$parenthesis_text" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    git config --global variable.latest-component-changed "$trimmed_parenthesis"
+    echo "[global variable] latest-component-changed: $trimmed_parenthesis" # Imprime la variable global de git que se ha actualizado
+    
+    # Mostrar el arreglo actualizado para debug
+    # updated_array=$(git config --get variable.latest-components-recent-list)
+    # echo "[global array] latest-components-recent-list: $updated_array"
+fi

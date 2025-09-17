@@ -54,3 +54,12 @@ The extension utilizes icons from VS Code Codicons for the status bar.
 
 - Ensure that the `variable.latest-component-changed` variable is properly configured in your .gitconfig file for accurate results.
 - The extension is designed to provide information about the latest changed component based on the development environment configuration.
+
+- The .gitconfig-example is the structure of file that contains all command alias to use and read by extension, this will be located in : 
+```
+C:\Users\Lenni\.gitconfig 
+```
+- The post-commit-example is the sctructure of file that contains all shell script commands to read by extensio, this will be located in:
+```
+C:\Program Files\Git\hooks\post-commit
+```
