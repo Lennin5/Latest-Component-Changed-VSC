@@ -7,6 +7,11 @@ The Latest Component Changed VSC extension for Visual Studio Code displays the l
 - Displays the latest changed component in the Visual Studio Code status bar.
 - Automatically updates when changes occur in the .gitconfig file.
 
+version 2.00
+
+- Show latest five components changed list when clicks on status bar
+- Switch between latest components changed easily. This agility change the current "latest component changed" between projects instead overwrite the "ac feat(otra vez un componente reciente); message"
+
 1. Install the extension from the Visual Studio Code Marketplace.
 2. The latest changed component will be displayed in the Visual Studio Code status bar automatically.
 3. Compatibility and personal use with conventional commit environment
