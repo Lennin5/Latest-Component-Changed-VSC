@@ -13,7 +13,10 @@
     "vscode": "^1.87.0"
   },
   "categories": [
-    "Other"
+    "Education",
+    "Formatters",
+    "Keymaps",
+    "Programming Languages"
   ],
   "main": "./out/extension.js",
   "activationEvents": [
