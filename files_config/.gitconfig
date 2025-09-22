@@ -1,7 +1,7 @@
 # C:\Users\Lenni\.gitconfig
 [variable]
-	latest-component-changed = perfil
-	latest-components-recent-list = button,perfil,new-co,lorem ipsum component,footer component
+	latest-component-changed = extension vsc
+	latest-components-recent-list = extension vsc,perfil,extension vs,new-co,README.md
 [alias]
 	lc = "!f() { echo '[global variable] latest-component-changed:' $(git config --get variable.latest-component-changed); }; f" # Mostrar el componente actual que se está modificando en desarrollo para los conventional commits
 	lcl = "!f() { echo '[global variable] latest-components-recent-list:' $(git config --get variable.latest-components-recent-list); }; f" # Mostrar la lista de componentes modificados en desarrollo para los conventional commits
@@ -14,6 +14,7 @@
 	lg = log --oneline --graph --all # Mostrar el historial de commits en una sola línea con gráficos | git log --oneline --graph --all
 	ch = "!f() { git checkout \"$*\"; }; f" # Cambiar de rama | git checkout nombre-rama
 	m = "!f() { git merge \"$*\"; }; f" # Hacer merge a una rama | git merge nombre-rama
+	r = "!f() { git remote -v; }; f" # Mostrar los repositorios remotos conectados | git remote -v
 	p = "!f() { git push origin \"$*\"; }; f" # Hacer push a una rama | git push origin nombre-rama
 	pp = "!f() { git pull origin \"$*\"; }; f" # Hacer pull a una rama | git pull origin nombre-rama
 	s = stash # Guardar cambios temporalmente | git stash
@@ -69,9 +70,7 @@
 	email = lenninlemus0@gmail.com
 [core]
 	hooksPath = C:/Program Files/Git/hooks
-[credential "helperselector"]
-	selected = manager-core
 [init]
 	defaultBranch = main
 [credential]
-	helper = manager-core
+	helper = manager
