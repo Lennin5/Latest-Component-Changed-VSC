@@ -1,0 +1,54 @@
+# C:\Users\Lenni\git-functions
+#!/bin/bash
+
+# Funcion que obtiene el último componente cambiado y hace un commit con un mensaje convencional
+# Esto se usa para evitar repetir mucho codigo en los custom alias que he creado
+conventional_commit_message() {
+    local type_of_commit=$1
+    local latest_component_changed=$(git config --get variable.latest-component-changed) # Obtiene el valor de la variable global de git que se encuentra en el .gitconfig
+    local message=$2
+    # Eliminamos espacios extras al inicio y final para evitar problemas
+    latest_component_changed=$(echo "$latest_component_changed" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    git add . && git commit -m "$type_of_commit($latest_component_changed): $message"
+}
+
+# Función para obtener el arreglo de componentes recientes
+get_components_array() {
+    git config --get variable.latest-components-recent-list 2>/dev/null || echo ""
+}
+
+# Función para establecer manualmente el componente actual (útil para la extensión de VSCode)
+set_current_component() {
+    local component=$1
+    if [ -n "$component" ]; then
+        # Eliminamos espacios extras al inicio y final para consistencia
+        component=$(echo "$component" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+        git config --global variable.latest-component-changed "$component"
+        echo "[global variable] latest-component-changed updated to: $component"
+        
+        # Obtener el arreglo actual
+        local current_array=$(git config --get variable.latest-components-recent-list 2>/dev/null || echo "")
+        
+        # Si el componente no está en el arreglo, agregarlo al inicio
+        if ! echo "$current_array" | grep -q "$component"; then
+            if [ -n "$current_array" ]; then
+                # Actualizar el arreglo con el nuevo componente al inicio
+                IFS=',' read -r -a components_array <<< "$current_array"
+                local new_components="$component"
+                local count=0
+                
+                for comp in "${components_array[@]}"; do
+                    comp_trim=$(echo "$comp" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+                    if [ "$comp_trim" != "$component" ] && [ $count -lt 4 ]; then
+                        new_components="$new_components,$comp"
+                        count=$((count + 1))
+                    fi
+                done
+                
+                git config --global variable.latest-components-recent-list "$new_components"
+            else
+                git config --global variable.latest-components-recent-list "$component"
+            fi
+        fi
+    fi
+}
